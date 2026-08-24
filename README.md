@@ -39,3 +39,10 @@ The 5-book limit.
 Returning books.
 Showing a member's borrowed books.
 
+# Design Principles
+
+> The project follows basic Object-Oriented Programming principles, including:
+
+- Encapsulation
+- Single Responsibility Principle
+- Meaningful naming
