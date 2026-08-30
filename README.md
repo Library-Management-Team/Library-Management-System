@@ -5,28 +5,36 @@
 > This project is a simple in-memory Library Management System developed using Java and Object-Oriented Programming.
 
 > Our small library wants software to manage lending
-so The system allows the library to:
+
+The system allows the library to:
 
 Register members.
-Add books with set the available copies count.
-Borrow books Enforce a maximum of 5 borrowed books per member.
+Add books with a set number of available copies.
+Borrow books while enforcing a maximum of 5 borrowed books per member.
 Return books.
-Show available books.
-Show the books currently borrowed by a specific member.
+Return available books as a list.
+Return books currently borrowed by a specific member as a list.
 
 # Entities/classes
 
 - Library => Responsable for basic operations, such as adding new books or member...
-- Book => It holds the book information.
-- Member => It Records information about who borrow books from library.
-- BorrowDetailes => It contains lending information, such as the borrowing date and the return date for handle the system.
+- Book => Holds the book information.
+- Member => Records information about who borrow books from library.
+- BorrowDetails => Contains lending information, such as the borrowing date and due date, to help manage the lending process.
 
 # How To Run\Requirements
 
 - Java JDK 17 or later
-- Visual Studio Code Or Other Program Can Run Java File On It.
+- Visual Studio Code or another program that can run Java files.
 
-# For Testing
+# Run Commands
+
+Open the terminal in the project root folder and run:
+
+javac SystemCode/*.java
+java SystemCode.Main
+
+# Testing
 
 > The project uses the Main class as a demo to test the main system operations.
 
@@ -37,7 +45,7 @@ Book availability.
 Borrowing books.
 The 5-book limit.
 Returning books.
-Showing a member's borrowed books.
+Returning a member's borrowed books.
 
 # Design Principles
 
