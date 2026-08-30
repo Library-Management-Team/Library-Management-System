@@ -1,18 +1,25 @@
 package SystemCode;
 
 public class Member {
-    private static int nextID = 1;
+    private static int nextId = 1;
 
-    private int ID;
+    private int id;
     private String name;
     private String contactInfo;
 
-    Member(String name, String contactInfo) {
-        ID = nextID++;
+    public Member(String name, String contactInfo) {
+        id = nextId++;
         this.name = name;
         this.contactInfo = contactInfo;
     }
-    int getId() {
-    return ID;
-}
+    public int getId() {
+    return id;
+    }
+    public string getName(){
+        return name;
+    }
+    public string getContactInfo(){
+        return contactInfo;
+    }
+
 }

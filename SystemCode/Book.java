@@ -1,37 +1,35 @@
 package SystemCode;
 
 public class Book {
-    private int ISBN;
+    private String isbn;
     private String title;
     private String author;
     private int availableCopies;
 
-    Book(int iSBN, String title, String author, int availableCopies) {
-        ISBN = iSBN;
+    public Book(String isbn, String title, String author, int availableCopies) {
+        this.isbn = isbn;
         this.title = title;
         this.author = author;
         this.availableCopies = availableCopies;
     }
 
-    boolean isAvailable(){
-        if(availableCopies > 0)
-            return true;
-        return false;
+    public boolean isAvailable(){
+        return availableCopies > 0;
     }
 
-    String getTitle() {
+    public String getTitle() {
         return title;
     }
     
-    int getIsbn() {
-    return ISBN;
+    public String getIsbn() {
+    return isbn;
     } 
     
-    void borrowCopy(){
+    public void borrowCopy(){
         availableCopies--;
     }
 
-    void returnCopy(){
+    public void returnCopy(){
         availableCopies++;
     }
     

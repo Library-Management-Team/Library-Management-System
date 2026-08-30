@@ -1,74 +1,106 @@
 package SystemCode;
-
+import java.util.List;
 public class Main {
+
     public static void main(String[] args) {
+
         Library library = new Library();
 
-        
-        library.registerMember("Lana", "lana@gmail.com");
-        library.registerMember("Sara", "sara@gmail.com");
+        Member lana = library.registerMember("Lana", "lana@gmail.com");
+        Member sara = library.registerMember("Sara", "sara@gmail.com");
 
-        
-        library.addBook(1, "Five Feets Apart", "", 2);
+        Book dataStrucBook = library.addBook(
+                "1", "Data Structure", "Robert", 2);
 
-        library.addBook(2, "First Head Design Patterns", "", 5);
+        Book javaBook = library.addBook(
+                "2", "Java", "John", 2);
 
-        library.addBook(3, "The Maze Runner", "", 2);
+        Book oopBook = library.addBook(
+                "3", "Object Oriented Programming", "Martin", 2);
 
-        
-        System.out.println("Available books:");
-        library.showAvailableBooks();
+        List<Book> availableBooks = library.getAvailableBooks();
 
-        
-        System.out.println("\nLana borrows 5 books");
+        if (!availableBooks.isEmpty()) {
+            System.out.println("Available books:");
 
-        library.borrowBook(1, 1);
-        library.borrowBook(1, 2);
-        library.borrowBook(1, 3);
-        library.borrowBook(1, 1);
-        library.borrowBook(1, 2);
+            for (Book book : availableBooks) {
+                System.out.println(book.getTitle());
+            }
+        } else {
+            System.out.println("There are no available books.");
+        }
 
-       
-        System.out.println("\nTrying to borrow sixth book:");
+        library.borrowBook(lana.getId(), dataStrucBook.getIsbn());
+        library.borrowBook(lana.getId(), javaBook.getIsbn());
+        library.borrowBook(lana.getId(), oopBook.getIsbn());
+        library.borrowBook(lana.getId(), dataStrucBook.getIsbn());
+        library.borrowBook(lana.getId(), javaBook.getIsbn());
 
-        boolean result = library.borrowBook(1, 2);
+        List<Book> lanaBooks = library.getBooksBorrowedBy(lana);
+
+        if (!lanaBooks.isEmpty()) {
+            System.out.println("\nLana borrows : "
+                    + lanaBooks.size() + " books.");
+        } else {
+            System.out.println("\nLana doesn't borrow any book yet.");
+        }
+
+        System.out.println("\nLana trying to borrow sixth book:");
+
+        boolean result = library.borrowBook(
+                lana.getId(), javaBook.getIsbn());
 
         if (!result) {
             System.out.println("Borrow failed.");
+        } else {
+            System.out.println("Borrow successful.");
         }
 
-        
-        System.out.println("\nLana's books:");
+        System.out.println("\nSara tries to borrow Java book.");
 
-        library.showMemberBooks(1);
-
-        System.out.println("\nSara tries to borrow Design Patterns:");
-
-        result = library.borrowBook(2, 3);
+        result = library.borrowBook(
+                sara.getId(), javaBook.getIsbn());
 
         if (!result) {
             System.out.println("Borrow failed: no available copies.");
+        } else {
+            System.out.println("Borrow successful.");
         }
 
-    
-        System.out.println("\nLana returns Five Feets Apart");
+        System.out.println("\nLana returns Java book");
 
-        result = library.returnBook(1, 1);
+        result = library.returnBook(
+                lana.getId(), javaBook.getIsbn());
 
         if (result) {
             System.out.println("Book returned successfully.");
+        } else {
+            System.out.println("Return failed.");
         }
 
-        System.out.println("\nSara borrows Five Feets Apart");
+        System.out.println("\nSara wants to borrow Java book.");
 
-        result = library.borrowBook(2, 1);
+        result = library.borrowBook(
+                sara.getId(), dataStrucBook.getIsbn());
 
         if (result) {
             System.out.println("Book borrowed successfully.");
+        } else {
+            System.out.println("Borrow failed: no available copies.");
         }
 
         System.out.println("\nAvailable books after all operations:");
 
-        library.showAvailableBooks();
+        List<Book> availableBooksNow = library.getAvailableBooks();
+
+        if (!availableBooksNow.isEmpty()) {
+            System.out.println("Available books:");
+
+            for (Book book : availableBooksNow) {
+                System.out.println(book.getTitle());
+            }
+        } else {
+            System.out.println("There are no available books.");
+        }
     }
 }
