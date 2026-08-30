@@ -25,6 +25,14 @@ public class Book {
     return isbn;
     } 
     
+    public String getAuthor(){
+        return author;
+    }
+
+    public int getAvailableCobiesCount(){
+        return availableCopies;
+    }
+
     public void borrowCopy(){
         availableCopies--;
     }
