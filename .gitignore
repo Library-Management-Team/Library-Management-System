@@ -1,0 +1,13 @@
+# Compiled Java
+*.class
+bin/
+out/
+target/
+
+# IDE / editor
+.vscode/
+.idea/
+*.iml
+
+# OS junk
+.DS_Store
