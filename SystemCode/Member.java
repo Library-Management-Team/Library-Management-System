@@ -12,13 +12,16 @@ public class Member {
         this.name = name;
         this.contactInfo = contactInfo;
     }
+
     public int getId() {
     return id;
     }
-    public string getName(){
+
+    public String getName(){
         return name;
     }
-    public string getContactInfo(){
+
+    public String getContactInfo(){
         return contactInfo;
     }
 
