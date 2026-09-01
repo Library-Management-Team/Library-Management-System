@@ -1,24 +1,13 @@
 package SystemCode;
 
-public class Book {
+public class Book extends LibraryItem {
     private String isbn;
-    private String title;
     private String author;
-    private int availableCopies;
 
-    public Book(String isbn, String title, String author, int availableCopies) {
+    public Book(String isbn, String title, String author) {
+        super(title);
         this.isbn = isbn;
-        this.title = title;
         this.author = author;
-        this.availableCopies = availableCopies;
-    }
-
-    public boolean isAvailable(){
-        return availableCopies > 0;
-    }
-
-    public String getTitle() {
-        return title;
     }
     
     public String getIsbn() {
@@ -29,17 +18,9 @@ public class Book {
         return author;
     }
 
-    public int getAvailableCobiesCount(){
-        return availableCopies;
+    @Override
+    public int getLoanPeriodDays() {
+        return 14;
     }
 
-    public void borrowCopy(){
-        availableCopies--;
-    }
-
-    public void returnCopy(){
-        availableCopies++;
-    }
-    
-    
 }
