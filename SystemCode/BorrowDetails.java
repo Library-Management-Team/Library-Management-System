@@ -7,10 +7,10 @@ public class BorrowDetails {
     private LocalDate borrowDate;
     private LocalDate dueDate;
 
-    public BorrowDetails(Member member, Copy copy, LocalDate borrowDate) {
+    public BorrowDetails(Member member, Copy copy) {
         this.member = member;
         this.copy = copy;
-        this.borrowDate = borrowDate;
+        this.borrowDate = LocalDate.now();
         this.dueDate = borrowDate.plusDays(copy.getTtem().getLoanPeriodDays());
     }
 
