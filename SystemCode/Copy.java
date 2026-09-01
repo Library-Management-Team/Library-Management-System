@@ -5,11 +5,16 @@ public class Copy {
     private String copyId;
     private String condition;
     private boolean available;
+    private LibraryItem item;
 
-    public Copy(String condition) {
+    public Copy(LibraryItem item) {
+        this.item = item;
         copyId = String.valueOf(nextCopyId++);
-        this.condition = condition;
+        condition = "New";
         available = true;
+    }
+    public LibraryItem getItem(){
+        return item;
     }
     public String getCopyId() {
         return copyId;
@@ -25,5 +30,5 @@ public class Copy {
     }
     public void markAsAvailable() {
     available = true;
-}
+    }
 }
