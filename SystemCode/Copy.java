@@ -2,6 +2,7 @@ package SystemCode;
 
 public class Copy {
     private static int nextCopyId = 1;
+    private static final String INITIAL_CONDITION = "New";
 
     private String copyId;
     private String condition;
@@ -11,10 +12,10 @@ public class Copy {
     public Copy(LibraryItem item) {
         this.item = item;
         copyId = String.valueOf(nextCopyId++);
-        condition = "New";
+        condition = INITIAL_CONDITION;
         available = true;
     }
-    
+
     public LibraryItem getItem() {
         return item;
     }
@@ -25,6 +26,10 @@ public class Copy {
 
     public String getCondition() {
         return condition;
+    }
+
+    public void setCondition(String condition) {
+        this.condition = condition;
     }
 
     public boolean isAvailable() {

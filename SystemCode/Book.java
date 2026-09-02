@@ -1,6 +1,7 @@
 package SystemCode;
 
 public class Book extends LibraryItem {
+    private static final int LOAN_PERIOD_DAYS = 14;
     private String isbn;
     private String author;
 
@@ -20,7 +21,7 @@ public class Book extends LibraryItem {
 
     @Override
     public int getLoanPeriodDays() {
-        return 14;
+        return LOAN_PERIOD_DAYS;
     }
 
 }
