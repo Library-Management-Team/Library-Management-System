@@ -4,18 +4,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 public class Library {
 
-    private static final int MAX_BOOKS_PER_MEMBER = 5;
+    private static final int MAX_ITEMS_PER_MEMBER = 5;
 
-    private ArrayList<Book> books = new ArrayList<>();
+    private ArrayList<LibraryItem> libraryItems = new ArrayList<>();
     private ArrayList<Member> members = new ArrayList<>();
     private ArrayList<BorrowDetails> loans = new ArrayList<>();
 
-    public Book addBook(String isbn, String title, String author, int availableCopies) {
-        Book book = new Book(isbn, title, author, availableCopies);
-        books.add(book);
-        return book;
+    public void addItem(LibraryItem item) {
+        libraryItems.add(item);
     }
 
     public Member registerMember(String name, String contactInfo) {
@@ -24,60 +23,63 @@ public class Library {
         return member;
     }
 
-    public List<Book> getAvailableBooks() {
-        List<Book> availableBooks = new ArrayList<>();
+    public List<LibraryItem> getLibraryItems() {
+        List<LibraryItem> items = new ArrayList<>();
 
-        for (Book book : books) {
-            if (book.isAvailable()) {
-                availableBooks.add(book);
-            }
+        for (LibraryItem item : libraryItems) {
+            items.add(item);
         }
 
-        return availableBooks;
+        return items;
     }
 
-    public boolean borrowBook(int memberId, String isbn) {
-        Book requestedBook = null;
-        Member member = null;
+    public boolean borrowItem(Member member, LibraryItem libraryItem) {
+        boolean existFlag = false;
 
         for (Member currentMember : members) {
-            if (currentMember.getId() == memberId) {
-                member = currentMember;
+            if (currentMember.getId().equals(member.getId())) {
+                existFlag = true;
                 break;
             }
         }
 
-        if (member == null) {
+        if (!xistFlag) {
             return false;
         }
+        existFlag = false;
 
-        int borrowedBooksCount = 0;
+        int borrowedItemsCount = 0;
 
         for (BorrowDetails loan : loans) {
-            if (loan.getMember().getId() == memberId) {
-                borrowedBooksCount++;
+            if (loan.getMember().getId().equals(member.getId())) {
+                borrowedItemsCount++;
             }
         }
 
-        if (borrowedBooksCount >= MAX_BOOKS_PER_MEMBER) {
+        if (borrowedItemsCount >= MAX_ITEMS_PER_MEMBER) {
             return false;
         }
 
-        for (Book book : books) {
-            if (book.getIsbn().equals(isbn)) {
-                requestedBook = book;
+        for (LibraryItem item : libraryItems) {
+            if (item == libraryItem) {
+                existFlag = true;
                 break;
             }
         }
 
-        if (requestedBook == null || !requestedBook.isAvailable()) {
+        if (!xistFlag) {
             return false;
         }
 
-        LocalDate borrowDate = LocalDate.now();
-        BorrowDetails loan = new BorrowDetails(member, requestedBook, borrowDate);
+        Copy copy = null;
+        copy = libraryItem.borrowCopy();
 
-        requestedBook.borrowCopy();
+        if (copy == null) {
+            return false;
+        }
+
+        BorrowDetails loan = new BorrowDetails(member, copy);
+
         loans.add(loan);
 
         return true;

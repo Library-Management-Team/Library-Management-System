@@ -1,4 +1,5 @@
 package SystemCode;
+
 public class Copy {
     private static int nextCopyId = 1;
 
@@ -13,22 +14,28 @@ public class Copy {
         condition = "New";
         available = true;
     }
-    public LibraryItem getItem(){
+    
+    public LibraryItem getItem() {
         return item;
     }
+
     public String getCopyId() {
         return copyId;
     }
+
     public String getCondition() {
         return condition;
     }
-    public boolean isAvailable(){
+
+    public boolean isAvailable() {
         return available;
     }
-    public void markAsBorrowed(){
+
+    public void markAsBorrowed() {
         available = false;
     }
+
     public void markAsAvailable() {
-    available = true;
+        available = true;
     }
 }

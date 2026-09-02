@@ -3,25 +3,26 @@ package SystemCode;
 public class Member {
     private static int nextId = 1;
 
-    private int id;
+    private String id;
     private String name;
     private String contactInfo;
 
     public Member(String name, String contactInfo) {
-        id = nextId++;
+        id = String.valueOf(nextId++);
+        ;
         this.name = name;
         this.contactInfo = contactInfo;
     }
 
-    public int getId() {
-    return id;
+    public String getId() {
+        return id;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public String getContactInfo(){
+    public String getContactInfo() {
         return contactInfo;
     }
 
