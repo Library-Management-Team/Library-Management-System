@@ -80,4 +80,11 @@ NOTE : "The Image At Images File".
 6. A simple **class diagram**
    - NOTE : "The Image At Images File".
 
+***Changes from Milestone 1***
+>> In Milestone 2, the system become support different types of library items, including Books, Magazines, and DVDs. 
+>> Added common abstract LibraryItem class introduced to contain the shared information and behavior, like title. 
+>> Physical copies are now represented by the Copy class instead of treating copies only as a count.
+>> BorrowDetailes now refers to a member and a specific physical Copy, which allows the system to track the exact copy that is borrowed and its condition. 
+>> The loan period is also determined by each item type class through polymorphism instead of having the Library check the item type.
+
 
