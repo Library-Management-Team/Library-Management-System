@@ -12,7 +12,12 @@ public abstract class LibraryItem {
     }
 
     public boolean isAvailable() {
-        return copies.size() > 0;
+        for (Copy copy : copies) {
+            if (copy.isAvailable()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Copy borrowCopy() {
