@@ -1,8 +1,6 @@
 package SystemCode;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Library {
@@ -71,8 +69,7 @@ public class Library {
             return false;
         }
 
-        Copy copy = null;
-        copy = libraryItem.borrowCopy();
+        Copy copy = libraryItem.borrowCopy();
 
         if (copy == null) {
             return false;
@@ -106,15 +103,24 @@ public class Library {
         return false;
     }
 
-    public List<Book> getBooksBorrowedBy(Member member) {
-        List<Book> memberBooks = new ArrayList<>();
+    public List<Copy> getCopiesBorrowedBy(Member member) {
+        List<Copy> copies = new ArrayList<>();
 
         for (BorrowDetails loan : loans) {
-            if (loan.getMember().getId() == member.getId()) {
-                memberBooks.add(loan.getBook());
+            if (loan.getMember().getId().equals(member.getId())) {
+                copies.add(loan.getCopy());
             }
         }
 
-        return memberBooks;
+        return copies;
+    }
+
+    public List<LibraryItem> getAvailableItems() {
+        List<LibraryItem> items = new ArrayList<>();
+        for (LibraryItem item : libraryItems) {
+            if (item.isAvailable())
+                items.add(item);
+        }
+        return items;
     }
 }

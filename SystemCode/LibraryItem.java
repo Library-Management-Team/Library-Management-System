@@ -11,6 +11,10 @@ public abstract class LibraryItem {
         this.copies = new ArrayList<>();
     }
 
+    public boolean isAvailable() {
+        return copies.size() > 0;
+    }
+
     public Copy borrowCopy() {
         for (Copy copy : copies) {
             if (copy.isAvailable()) {
