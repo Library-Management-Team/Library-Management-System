@@ -31,7 +31,7 @@ public class Library {
         return items;
     }
 
-    public boolean borrowItem(Member member, LibraryItem libraryItem) {
+    public BorrowDetails borrowItem(Member member, LibraryItem libraryItem) {
         boolean existFlag = false;
 
         for (Member currentMember : members) {
@@ -42,7 +42,7 @@ public class Library {
         }
 
         if (!existFlag) {
-            return false;
+            return null;
         }
         existFlag = false;
 
@@ -55,7 +55,7 @@ public class Library {
         }
 
         if (borrowedItemsCount >= MAX_ITEMS_PER_MEMBER) {
-            return false;
+            return null;
         }
 
         for (LibraryItem item : libraryItems) {
@@ -66,20 +66,20 @@ public class Library {
         }
 
         if (!existFlag) {
-            return false;
+            return null;
         }
 
         Copy copy = libraryItem.borrowCopy();
 
         if (copy == null) {
-            return false;
+            return null;
         }
 
         BorrowDetails loan = new BorrowDetails(member, copy);
 
         loans.add(loan);
 
-        return true;
+        return loan;
     }
 
     public boolean returnItem(Member member, Copy copy, String condition) {

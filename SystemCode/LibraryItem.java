@@ -45,6 +45,16 @@ public abstract class LibraryItem {
         copies.add(copy);
     }
 
+    public ArrayList<Copy> getCopies() {
+        ArrayList<Copy> copyList = new ArrayList<>();
+
+        for (Copy copy : copies) {
+            copyList.add(copy);
+        }
+
+        return copyList;
+    }
+
     public abstract int getLoanPeriodDays();
 
 }

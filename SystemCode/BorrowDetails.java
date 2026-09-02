@@ -11,7 +11,7 @@ public class BorrowDetails {
         this.member = member;
         this.copy = copy;
         this.borrowDate = LocalDate.now();
-        this.dueDate = borrowDate.plusDays(copy.getTtem().getLoanPeriodDays());
+        this.dueDate = borrowDate.plusDays(copy.getItem().getLoanPeriodDays());
     }
 
     public Member getMember() {
