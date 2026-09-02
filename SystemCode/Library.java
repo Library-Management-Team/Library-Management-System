@@ -43,7 +43,7 @@ public class Library {
             }
         }
 
-        if (!xistFlag) {
+        if (!existFlag) {
             return false;
         }
         existFlag = false;
@@ -67,7 +67,7 @@ public class Library {
             }
         }
 
-        if (!xistFlag) {
+        if (!existFlag) {
             return false;
         }
 
@@ -85,20 +85,22 @@ public class Library {
         return true;
     }
 
-    public boolean returnBook(int memberId, String isbn) {
-        Iterator<BorrowDetails> iterator = loans.iterator();
+    public boolean returnItem(Member member, Copy copy, String condition) {
+        BorrowDetails loanToRemove = null;
 
-        while (iterator.hasNext()) {
-            BorrowDetails loan = iterator.next();
+        for (BorrowDetails loan : loans) {
+            if (loan.getMember().getId().equals(member.getId())
+                    && loan.getCopy().getCopyId().equals(copy.getCopyId())) {
 
-            if (loan.getMember().getId() == memberId
-                    && loan.getBook().getIsbn().equals(isbn)) {
-
-                loan.getBook().returnCopy();
-                iterator.remove();
-
-                return true;
+                copy.getItem().returnCopy(copy, condition);
+                loanToRemove = loan;
+                break;
             }
+        }
+
+        if (loanToRemove != null) {
+            loans.remove(loanToRemove);
+            return true;
         }
 
         return false;

@@ -10,6 +10,7 @@ public abstract class LibraryItem {
         this.title = title;
         this.copies = new ArrayList<>();
     }
+
     public Copy borrowCopy() {
         for (Copy copy : copies) {
             if (copy.isAvailable()) {
@@ -18,8 +19,15 @@ public abstract class LibraryItem {
             }
         }
 
-    return null;
+        return null;
     }
+
+    public void returnCopy(Copy copy, String condition) {
+        copy.markAsAvailable();
+        copy.setCondition(condition);
+
+    }
+
     public String getTitle() {
         return title;
     }
