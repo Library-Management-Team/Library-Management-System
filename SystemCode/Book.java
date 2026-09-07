@@ -1,6 +1,7 @@
 package SystemCode;
 
 public class Book {
+    private static final int LOAN_PERIOD_DAYS = 14;
     private String isbn;
     private String title;
     private String author;
@@ -13,33 +14,36 @@ public class Book {
         this.availableCopies = availableCopies;
     }
 
-    public boolean isAvailable(){
+    public int getBookLoanPeriodDays() {
+        return LOAN_PERIOD_DAYS;
+    }
+
+    public boolean isAvailable() {
         return availableCopies > 0;
     }
 
     public String getTitle() {
         return title;
     }
-    
+
     public String getIsbn() {
-    return isbn;
-    } 
-    
-    public String getAuthor(){
+        return isbn;
+    }
+
+    public String getAuthor() {
         return author;
     }
 
-    public int getAvailableCobiesCount(){
+    public int getAvailableCopiesCount() {
         return availableCopies;
     }
 
-    public void borrowCopy(){
+    public void borrowCopy() {
         availableCopies--;
     }
 
-    public void returnCopy(){
+    public void returnCopy() {
         availableCopies++;
     }
-    
-    
+
 }
