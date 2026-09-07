@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 public class Library {
 
     private static final int MAX_BOOKS_PER_MEMBER = 5;
@@ -36,7 +37,7 @@ public class Library {
         return availableBooks;
     }
 
-    public boolean borrowBook(int memberId, String isbn) {
+    public BorrowDetails borrowBook(int memberId, String isbn) {
         Book requestedBook = null;
         Member member = null;
 
@@ -48,7 +49,7 @@ public class Library {
         }
 
         if (member == null) {
-            return false;
+            return null;
         }
 
         int borrowedBooksCount = 0;
@@ -60,7 +61,7 @@ public class Library {
         }
 
         if (borrowedBooksCount >= MAX_BOOKS_PER_MEMBER) {
-            return false;
+            return null;
         }
 
         for (Book book : books) {
@@ -71,7 +72,7 @@ public class Library {
         }
 
         if (requestedBook == null || !requestedBook.isAvailable()) {
-            return false;
+            return null;
         }
 
         LocalDate borrowDate = LocalDate.now();
@@ -80,7 +81,7 @@ public class Library {
         requestedBook.borrowCopy();
         loans.add(loan);
 
-        return true;
+        return loan;
     }
 
     public boolean returnBook(int memberId, String isbn) {
