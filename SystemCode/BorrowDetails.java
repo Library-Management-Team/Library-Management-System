@@ -1,5 +1,7 @@
 package SystemCode;
+
 import java.time.LocalDate;
+
 public class BorrowDetails {
 
     private Member member;
@@ -22,10 +24,11 @@ public class BorrowDetails {
         return copy;
     }
 
-    public LocalDate getBorrowDate(){
+    public LocalDate getBorrowDate() {
         return borrowDate;
     }
-    public LocalDate getDueDate(){
+
+    public LocalDate getDueDate() {
         return dueDate;
     }
 

@@ -3,6 +3,7 @@ package SystemCode;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Library {
 
     private static final int MAX_ITEMS_PER_MEMBER = 5;
@@ -79,6 +80,7 @@ public class Library {
 
         loans.add(loan);
 
+        return loan;
         return loan;
     }
 

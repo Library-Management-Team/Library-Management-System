@@ -1,6 +1,8 @@
 package SystemCode;
 
+
 import java.util.List;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -72,6 +74,7 @@ public class Main {
             for (LibraryItem item : availableItems) {
                 System.out.println(item.getTitle() + " - " + item.getClass().getSimpleName());
             }
+
         } else {
             System.out.println("There are no available items.");
         }
@@ -156,8 +159,11 @@ public class Main {
             for (LibraryItem item : availableItems) {
                 System.out.println(item.getTitle() + " - " + item.getClass().getSimpleName());
             }
+
         } else {
             System.out.println("There are no available items.");
         }
+
     }
+
 }
