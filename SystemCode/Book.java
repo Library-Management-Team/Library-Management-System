@@ -1,39 +1,49 @@
 package SystemCode;
 
 public class Book {
-    private int ISBN;
+    private static final int LOAN_PERIOD_DAYS = 14;
+    private String isbn;
     private String title;
     private String author;
     private int availableCopies;
 
-    Book(int iSBN, String title, String author, int availableCopies) {
-        ISBN = iSBN;
+    public Book(String isbn, String title, String author, int availableCopies) {
+        this.isbn = isbn;
         this.title = title;
         this.author = author;
         this.availableCopies = availableCopies;
     }
 
-    boolean isAvailable(){
-        if(availableCopies > 0)
-            return true;
-        return false;
+    public int getBookLoanPeriodDays() {
+        return LOAN_PERIOD_DAYS;
     }
 
-    String getTitle() {
+    public boolean isAvailable() {
+        return availableCopies > 0;
+    }
+
+    public String getTitle() {
         return title;
     }
-    
-    int getIsbn() {
-    return ISBN;
-    } 
-    
-    void borrowCopy(){
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public int getAvailableCopiesCount() {
+        return availableCopies;
+    }
+
+    public void borrowCopy() {
         availableCopies--;
     }
 
-    void returnCopy(){
+    public void returnCopy() {
         availableCopies++;
     }
-    
-    
+
 }

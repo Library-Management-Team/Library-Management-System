@@ -1,5 +1,7 @@
 package SystemCode;
+
 import java.time.LocalDate;
+
 public class BorrowDetails {
 
     private Member member;
@@ -7,19 +9,27 @@ public class BorrowDetails {
     private LocalDate borrowDate;
     private LocalDate dueDate;
 
-    BorrowDetails(Member member, Book book, LocalDate borrowDate) {
+    public BorrowDetails(Member member, Book book, LocalDate borrowDate) {
         this.member = member;
         this.book = book;
         this.borrowDate = borrowDate;
-        this.dueDate = borrowDate.plusDays(14);
+        this.dueDate = borrowDate.plusDays(book.getBookLoanPeriodDays());
     }
 
-    Member getMember() {
+    public Member getMember() {
         return member;
     }
 
-    Book getBook() {
+    public Book getBook() {
         return book;
+    }
+
+    public LocalDate getBorrowDate() {
+        return borrowDate;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
     }
 
 }
