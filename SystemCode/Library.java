@@ -81,7 +81,7 @@ public class Library {
         loans.add(loan);
 
         return loan;
-        return loan;
+        
     }
 
     public boolean returnItem(Member member, Copy copy, String condition) {
