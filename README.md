@@ -1,38 +1,38 @@
-## Library Management System
+# Library Management System
 
-# Project Description:
+## Project Description
 
 > This project is a simple in-memory Library Management System developed using Java and Object-Oriented Programming.
 
-> Our small library wants software to manage lending
+> Our small library needs software to manage lending operations.
 
 The system allows the library to:
 
-Register members.
-Add books, Magazines, DVDs.
-Borrow item while enforcing a maximum of 5 borrowed items per member.
-Return items of certain type.
-Return items currently borrowed by a specific member as a list.
-Return list of items showing everything currently available.
-Return the due date, and that due date depends on the type of item.
+- Register members.
+- Add books, magazines, and DVDs.
+- Borrow items while enforcing a maximum of 5 borrowed items per member.
+- Return items of different types.
+- Return a list of items currently borrowed by a specific member.
+- Return a list of items that are currently available.
+- Return the due date, which depends on the type of item.
 
-# Entities/classes
+## Entities/classes
 
-- Library => Responsible for basic operations, such as adding new books or member...
-- LibraryItem => Contains the common attributes and methods for any item at library, like title. 
-- Book => Represent a library item, holds the book information.
-- Magazine => Represent a library item, hold the magazine information.
-- DVD => Represent a library item, hold the DVD information.
+- Library => Responsible for basic operations, such as adding new books or members.
+- LibraryItem => Contains the common attributes and methods for any item in the library, such as the title.
+- Book => Represents a library item and holds the book's information.
+- Magazine => Represents a library item and holds the magazine's information.
+- DVD => Represents a library item and holds the DVD's information.
 - Copy => Represents one physical copy of a library item and stores its copy ID and condition.
-- Member => Records information about who borrows books from library.
+- Member => Records information about who borrows books from the library.
 - BorrowDetails => Contains lending information, such as the borrowing date and due date, to help manage the lending process.
 
-# How To Run / Requirements
+## How To Run / Requirements
 
-- Java JDK 17 or later
+- Java JDK 17 or later.
 - Visual Studio Code or another program that can run Java files.
 
-# Run Commands
+## Run Commands
 
 Open the terminal in the project root folder and run:
 
@@ -63,3 +63,11 @@ java SystemCode.Main
 - Polymorphism
 - Single Responsibility Principle
 - Meaningful naming
+
+### ***Abstract class or interface?***
+
+1. We chose an abstract class for `LibraryItem` because Books, Magazines, and DVDs share common data and behavior.
+
+2. The abstract class allows us to store common fields and implemented methods in one place. We also use an abstract `getLoanPeriodDays()` method because each item type can have a different loan period, so each subclass must provide its own implementation.
+
+3. An interface is better for a capability or behavior. If we used an interface for `LibraryItem`, each item would need to manage its own fields and common methods, which would cause duplicated code.
