@@ -23,4 +23,9 @@ public class Magazine extends LibraryItem {
     public int getLoanPeriodDays() {
         return LOAN_PERIOD_DAYS;
     }
+
+    @Override
+    public String getItemType() {
+        return "Magazine";
+}
 }

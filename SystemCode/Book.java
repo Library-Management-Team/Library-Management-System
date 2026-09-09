@@ -24,4 +24,8 @@ public class Book extends LibraryItem {
         return LOAN_PERIOD_DAYS;
     }
 
+    @Override
+    public String getItemType() {
+        return "Book";
+    }
 }

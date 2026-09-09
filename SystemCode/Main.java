@@ -80,8 +80,7 @@ public class Main {
         if (!availableItems.isEmpty()) {
             System.out.println("Available items:");
             for (LibraryItem item : availableItems) {
-                System.out.println(item.getTitle()
-                        + " - " + item.getClass().getSimpleName());
+                System.out.println(item.getTitle() + " - " + item.getItemType());
             }
         } else {
             System.out.println("There are no available items.");
@@ -152,8 +151,7 @@ public class Main {
         System.out.println("\n--- Items and their copies ---");
 
         for (LibraryItem item : library.getLibraryItems()) {
-            System.out.println(item.getTitle()
-                    + " - " + item.getClass().getSimpleName());
+            System.out.println(item.getTitle() + " - " + item.getItemType());
 
             for (Copy copy : item.getCopies()) {
                 System.out.println("  Copy ID: " + copy.getCopyId()
@@ -169,8 +167,7 @@ public class Main {
             System.out.println("Available items:");
 
             for (LibraryItem item : availableItems) {
-                System.out.println(item.getTitle()
-                        + " - " + item.getClass().getSimpleName());
+                System.out.println(item.getTitle() + " - " + item.getItemType());
             }
         } else {
             System.out.println("There are no available items.");

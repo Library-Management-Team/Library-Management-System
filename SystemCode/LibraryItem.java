@@ -57,4 +57,6 @@ public abstract class LibraryItem {
 
     public abstract int getLoanPeriodDays();
 
+    public abstract String getItemType();
+
 }
