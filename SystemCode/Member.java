@@ -6,12 +6,13 @@ public class Member {
     private String id;
     private String name;
     private String contactInfo;
+    private MembershipTier membershipTier;
 
-    public Member(String name, String contactInfo) {
+    public Member(String name, String contactInfo, MembershipTier membershipTier) {
         id = String.valueOf(nextId++);
-        ;
         this.name = name;
         this.contactInfo = contactInfo;
+        this.membershipTier = membershipTier;
     }
 
     public String getId() {
@@ -24,6 +25,10 @@ public class Member {
 
     public String getContactInfo() {
         return contactInfo;
+    }
+
+    public MembershipTier getTier(){
+        return membershipTier;
     }
 
 }
