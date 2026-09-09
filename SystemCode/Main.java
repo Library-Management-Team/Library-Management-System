@@ -8,204 +8,169 @@ public class Main {
 
         Library library = new Library();
 
+        // Add a book with 3 copies.
+        Book dataStructureBook = new Book("1", "Data Structure", "Robert");
+        library.addItem(dataStructureBook);
+        Copy bookCopy1 = new Copy(dataStructureBook);
+        Copy bookCopy2 = new Copy(dataStructureBook);
+        Copy bookCopy3 = new Copy(dataStructureBook);
+        dataStructureBook.addCopy(bookCopy1);
+        dataStructureBook.addCopy(bookCopy2);
+        dataStructureBook.addCopy(bookCopy3);
+
+        // Add a magazine with 1 copy.
+        Magazine magazine = new Magazine("Science Magazine", "10", "August 2026");
+        library.addItem(magazine);
+        Copy magazineCopy = new Copy(magazine);
+        magazine.addCopy(magazineCopy);
+
+        // Add a DVD with 2 copies.
+        DVD dvd = new DVD("The Matrix", "Lana", 136);
+        library.addItem(dvd);
+        Copy dvdCopy1 = new Copy(dvd);
+        Copy dvdCopy2 = new Copy(dvd);
+        dvd.addCopy(dvdCopy1);
+        dvd.addCopy(dvdCopy2);
+
+        // Register 2 members.
         Member lana = library.registerMember("Lana", "lana@gmail.com");
         Member sara = library.registerMember("Sara", "sara@gmail.com");
 
         System.out.println("\nLibrary Members: ");
-
         System.out.println(lana.getName() + " - " + lana.getContactInfo());
-
         System.out.println(sara.getName() + " - " + sara.getContactInfo());
 
-        Book dataStrucBook = library.addBook(
-                "1", "Data Structure", "Robert", 2);
+        // Borrow one of each type and print the due date for each.
+        System.out.println("--- Borrow one of each type ---");
 
-        Book javaBook = library.addBook(
-                "2", "Java", "John", 2);
+        BorrowDetails loan = library.borrowItem(lana, dataStructureBook);
+        if (loan != null) {
+            System.out.println(loan.getMember().getName()
+                    + " borrowed: " + loan.getCopy().getItem().getTitle()
+                    + " at " + loan.getBorrowDate()
+                    + " - Book due date: " + loan.getDueDate());
+        } else {
+            System.out.println("Book borrow failed.");
+        }
 
-        Book oopBook = library.addBook(
-                "3", "Object Oriented Programming", "Martin", 2);
+        loan = library.borrowItem(lana, magazine);
+        if (loan != null) {
+            System.out.println(loan.getMember().getName()
+                    + " borrowed: " + loan.getCopy().getItem().getTitle()
+                    + " at " + loan.getBorrowDate()
+                    + " - Magazine due date: " + loan.getDueDate());
+        } else {
+            System.out.println("Magazine borrow failed.");
+        }
 
-        List<Book> availableBooks = library.getAvailableBooks();
+        BorrowDetails loan3 = library.borrowItem(lana, dvd);
+        if (loan3 != null) {
+            System.out.println(loan3.getMember().getName()
+                    + " borrowed: " + loan3.getCopy().getItem().getTitle()
+                    + " at " + loan3.getBorrowDate()
+                    + " - DVD due date: " + loan3.getDueDate());
+        } else {
+            System.out.println("DVD borrow failed.");
+        }
 
-        if (!availableBooks.isEmpty()) {
+        // Print the available items.
+        System.out.println("\n--- Available items ---");
 
-            System.out.println("Available books:");
-
-            for (Book book : availableBooks) {
-
-                System.out.println(book.getTitle() + " by " + book.getAuthor() + " - Available copies: "
-                        + book.getAvailableCopiesCount());
-
+        List<LibraryItem> availableItems = library.getAvailableItems();
+        if (!availableItems.isEmpty()) {
+            System.out.println("Available items:");
+            for (LibraryItem item : availableItems) {
+                System.out.println(item.getTitle() + " - " + item.getItemType());
             }
-
         } else {
-
-            System.out.println("There are no available books.");
-
+            System.out.println("There are no available items.");
         }
 
-        BorrowDetails loan = library.borrowBook(lana.getId(), dataStrucBook.getIsbn());
+        // Test the 5-item limit.
+        System.out.println("\n--- Testing the 5-item limit ---");
 
+        loan = library.borrowItem(lana, dataStructureBook);
         if (loan != null) {
-
-            System.out.println("Borrowed " + loan.getBook().getTitle() + " - due " + loan.getDueDate());
-
+            System.out.println("Second book copy borrowed successfully.");
         } else {
-
             System.out.println("Borrow failed.");
-
         }
 
-        loan = library.borrowBook(lana.getId(), javaBook.getIsbn());
-
+        loan = library.borrowItem(lana, dataStructureBook);
         if (loan != null) {
-
-            System.out.println("Borrowed " + loan.getBook().getTitle() + " - due " + loan.getDueDate());
-
+            System.out.println("Third book copy borrowed successfully.");
         } else {
-
             System.out.println("Borrow failed.");
-
         }
 
-        loan = library.borrowBook(lana.getId(), oopBook.getIsbn());
+        System.out.println("Lana has borrowed "
+                + library.getCopiesBorrowedBy(lana).size()
+                + " items.");
 
+        System.out.println("\nLana tries to borrow a sixth item:");
+
+        loan = library.borrowItem(lana, dvd);
         if (loan != null) {
-
-            System.out.println("Borrowed " + loan.getBook().getTitle() + " - due " + loan.getDueDate());
-
+            System.out.println("Borrow successful.");
         } else {
-
-            System.out.println("Borrow failed.");
-
+            System.out.println("Borrow failed: Lana has reached the 5-item limit.");
         }
 
-        loan = library.borrowBook(lana.getId(), dataStrucBook.getIsbn());
+        // Test unavailable magazine copy.
+        System.out.println("\n--- Testing unavailable magazine copy ---");
+        System.out.println("Magazine available: " + magazine.isAvailable());
 
-        if (loan != null) {
+        // Return Lana's magazine copy.
+        List<Copy> lanaCopies = library.getCopiesBorrowedBy(lana);
+        Copy borrowedMagazineCopy = null;
 
-            System.out.println("Borrowed " + loan.getBook().getTitle() + " - due " + loan.getDueDate());
-
-        } else {
-
-            System.out.println("Borrow failed.");
-
-        }
-
-        loan = library.borrowBook(lana.getId(), javaBook.getIsbn());
-
-        if (loan != null) {
-
-            System.out.println("Borrowed " + loan.getBook().getTitle() + " - due " + loan.getDueDate());
-
-        } else {
-
-            System.out.println("Borrow failed.");
-
-        }
-
-        List<Book> lanaBooks = library.getBooksBorrowedBy(lana);
-
-        if (!lanaBooks.isEmpty()) {
-
-            System.out.println("\n" + lana.getName() + " has borrowed " + lanaBooks.size() + " books.");
-
-            for (Book book : lanaBooks) {
-
-                System.out.println("  " + book.getTitle() + " by " + book.getAuthor());
-
+        for (Copy copy : lanaCopies) {
+            if (copy.getItem() == magazine) {
+                borrowedMagazineCopy = copy;
+                break;
             }
-
-        } else {
-
-            System.out.println("\nLana doesn't borrow any book yet.");
-
         }
 
-        System.out.println("\nLana trying to borrow sixth book:");
-
-        loan = library.borrowBook(
-                lana.getId(), javaBook.getIsbn());
-
-        if (loan != null) {
-
-            System.out.println("Borrowed " + loan.getBook().getTitle() + " - due " + loan.getDueDate());
-
-        } else {
-
-            System.out.println("Borrow failed: Lana has reached the 5-book limit.");
-
-        }
-
-        System.out.println("\nSara tries to borrow Java book.");
-
-        loan = library.borrowBook(
-                sara.getId(), javaBook.getIsbn());
-
-        if (loan != null) {
-
-            System.out.println("Borrowed " + loan.getBook().getTitle() + " - due " + loan.getDueDate());
-
-        } else {
-
-            System.out.println("Borrow failed: no available copies.");
-
-        }
-
-        System.out.println("\nLana returns Java book");
-
-        boolean result = library.returnBook(
-                lana.getId(), javaBook.getIsbn());
-
-        if (result) {
-
-            System.out.println("Book returned successfully.");
-
-        } else {
-
-            System.out.println("Return failed.");
-
-        }
-
-        System.out.println("\nSara wants to borrow Java book.");
-
-        loan = library.borrowBook(
-                sara.getId(), javaBook.getIsbn());
-
-        if (loan != null) {
-
-            System.out.println("Book borrowed successfully.");
-
-            System.out.println("Borrowed " + loan.getBook().getTitle() + " - due " + loan.getDueDate());
-
-        } else {
-
-            System.out.println("Borrow failed: no available copies.");
-
-        }
-
-        System.out.println("\nAvailable books after all operations:");
-
-        List<Book> availableBooksNow = library.getAvailableBooks();
-
-        if (!availableBooksNow.isEmpty()) {
-
-            System.out.println("Available books:");
-
-            for (Book book : availableBooksNow) {
-
-                System.out.println(book.getTitle() + " by " + book.getAuthor() + " - Available copies: "
-                        + book.getAvailableCopiesCount());
-
+        if (borrowedMagazineCopy != null) {
+            boolean result = library.returnItem(lana, borrowedMagazineCopy, "Worn");
+            if (result) {
+                System.out.println("Magazine copy returned successfully.");
+            } else {
+                System.out.println("Magazine return failed.");
             }
-
-        } else {
-
-            System.out.println("There are no available books.");
-
         }
 
+        BorrowDetails loan4 = library.borrowItem(sara, magazine);
+        if (loan4 != null) {
+            System.out.println("Sara borrowed the magazine.");
+        } else {
+            System.out.println("Magazine borrow failed.");
+        }
+
+        // Print the item's copies with their conditions.
+        System.out.println("\n--- Items and their copies ---");
+
+        for (LibraryItem item : library.getLibraryItems()) {
+            System.out.println(item.getTitle() + " - " + item.getItemType());
+
+            for (Copy copy : item.getCopies()) {
+                System.out.println("  Copy ID: " + copy.getCopyId()
+                        + " - Condition: " + copy.getCondition());
+            }
+        }
+
+        // Print the available items again.
+        System.out.println("\n--- Available items after return ---");
+
+        availableItems = library.getAvailableItems();
+        if (!availableItems.isEmpty()) {
+            System.out.println("Available items:");
+
+            for (LibraryItem item : availableItems) {
+                System.out.println(item.getTitle() + " - " + item.getItemType());
+            }
+        } else {
+            System.out.println("There are no available items.");
+        }
     }
-
 }

@@ -1,29 +1,14 @@
 package SystemCode;
 
-public class Book {
+public class Book extends LibraryItem {
     private static final int LOAN_PERIOD_DAYS = 14;
     private String isbn;
-    private String title;
     private String author;
-    private int availableCopies;
 
-    public Book(String isbn, String title, String author, int availableCopies) {
+    public Book(String isbn, String title, String author) {
+        super(title);
         this.isbn = isbn;
-        this.title = title;
         this.author = author;
-        this.availableCopies = availableCopies;
-    }
-
-    public int getBookLoanPeriodDays() {
-        return LOAN_PERIOD_DAYS;
-    }
-
-    public boolean isAvailable() {
-        return availableCopies > 0;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public String getIsbn() {
@@ -34,16 +19,13 @@ public class Book {
         return author;
     }
 
-    public int getAvailableCopiesCount() {
-        return availableCopies;
+    @Override
+    public int getLoanPeriodDays() {
+        return LOAN_PERIOD_DAYS;
     }
 
-    public void borrowCopy() {
-        availableCopies--;
+    @Override
+    public String getItemType() {
+        return "Book";
     }
-
-    public void returnCopy() {
-        availableCopies++;
-    }
-
 }

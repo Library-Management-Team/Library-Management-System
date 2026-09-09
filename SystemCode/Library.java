@@ -1,22 +1,19 @@
 package SystemCode;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+
 
 public class Library {
 
-    private static final int MAX_BOOKS_PER_MEMBER = 5;
+    private static final int MAX_ITEMS_PER_MEMBER = 5;
 
-    private ArrayList<Book> books = new ArrayList<>();
+    private ArrayList<LibraryItem> libraryItems = new ArrayList<>();
     private ArrayList<Member> members = new ArrayList<>();
     private ArrayList<BorrowDetails> loans = new ArrayList<>();
 
-    public Book addBook(String isbn, String title, String author, int availableCopies) {
-        Book book = new Book(isbn, title, author, availableCopies);
-        books.add(book);
-        return book;
+    public void addItem(LibraryItem item) {
+        libraryItems.add(item);
     }
 
     public Member registerMember(String name, String contactInfo) {
@@ -25,93 +22,107 @@ public class Library {
         return member;
     }
 
-    public List<Book> getAvailableBooks() {
-        List<Book> availableBooks = new ArrayList<>();
+    public List<LibraryItem> getLibraryItems() {
+        List<LibraryItem> items = new ArrayList<>();
 
-        for (Book book : books) {
-            if (book.isAvailable()) {
-                availableBooks.add(book);
-            }
+        for (LibraryItem item : libraryItems) {
+            items.add(item);
         }
 
-        return availableBooks;
+        return items;
     }
 
-    public BorrowDetails borrowBook(int memberId, String isbn) {
-        Book requestedBook = null;
-        Member member = null;
+    public BorrowDetails borrowItem(Member member, LibraryItem libraryItem) {
+        boolean existFlag = false;
 
         for (Member currentMember : members) {
-            if (currentMember.getId() == memberId) {
-                member = currentMember;
+            if (currentMember.getId().equals(member.getId())) {
+                existFlag = true;
                 break;
             }
         }
 
-        if (member == null) {
+        if (!existFlag) {
             return null;
         }
+        existFlag = false;
 
-        int borrowedBooksCount = 0;
+        int borrowedItemsCount = 0;
 
         for (BorrowDetails loan : loans) {
-            if (loan.getMember().getId() == memberId) {
-                borrowedBooksCount++;
+            if (loan.getMember().getId().equals(member.getId())) {
+                borrowedItemsCount++;
             }
         }
 
-        if (borrowedBooksCount >= MAX_BOOKS_PER_MEMBER) {
+        if (borrowedItemsCount >= MAX_ITEMS_PER_MEMBER) {
             return null;
         }
 
-        for (Book book : books) {
-            if (book.getIsbn().equals(isbn)) {
-                requestedBook = book;
+        for (LibraryItem item : libraryItems) {
+            if (item == libraryItem) {
+                existFlag = true;
                 break;
             }
         }
 
-        if (requestedBook == null || !requestedBook.isAvailable()) {
+        if (!existFlag) {
             return null;
         }
 
-        LocalDate borrowDate = LocalDate.now();
-        BorrowDetails loan = new BorrowDetails(member, requestedBook, borrowDate);
+        Copy copy = libraryItem.borrowCopy();
 
-        requestedBook.borrowCopy();
+        if (copy == null) {
+            return null;
+        }
+
+        BorrowDetails loan = new BorrowDetails(member, copy);
+
         loans.add(loan);
 
         return loan;
+        
     }
 
-    public boolean returnBook(int memberId, String isbn) {
-        Iterator<BorrowDetails> iterator = loans.iterator();
+    public boolean returnItem(Member member, Copy copy, String condition) {
+        BorrowDetails loanToRemove = null;
 
-        while (iterator.hasNext()) {
-            BorrowDetails loan = iterator.next();
+        for (BorrowDetails loan : loans) {
+            if (loan.getMember().getId().equals(member.getId())
+                    && loan.getCopy().getCopyId().equals(copy.getCopyId())) {
 
-            if (loan.getMember().getId() == memberId
-                    && loan.getBook().getIsbn().equals(isbn)) {
-
-                loan.getBook().returnCopy();
-                iterator.remove();
-
-                return true;
+                copy.getItem().returnCopy(copy, condition);
+                loanToRemove = loan;
+                break;
             }
+        }
+
+        if (loanToRemove != null) {
+            loans.remove(loanToRemove);
+            return true;
         }
 
         return false;
     }
 
-    public List<Book> getBooksBorrowedBy(Member member) {
-        List<Book> memberBooks = new ArrayList<>();
+    public List<Copy> getCopiesBorrowedBy(Member member) {
+        List<Copy> copies = new ArrayList<>();
 
         for (BorrowDetails loan : loans) {
-            if (loan.getMember().getId() == member.getId()) {
-                memberBooks.add(loan.getBook());
+            if (loan.getMember().getId().equals(member.getId())) {
+                copies.add(loan.getCopy());
             }
         }
 
-        return memberBooks;
+        return copies;
+    }
+
+    public List<LibraryItem> getAvailableItems() {
+        List<LibraryItem> items = new ArrayList<>();
+        for (LibraryItem item : libraryItems) {
+            if (item.isAvailable())
+                items.add(item);
+        }
+        return items;
     }
 }
