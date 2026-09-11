@@ -7,6 +7,7 @@ public class Member {
     private String name;
     private String contactInfo;
     private MembershipTier membershipTier;
+    private int loansCount = 0;
 
     public Member(String name, String contactInfo, MembershipTier membershipTier) {
         id = String.valueOf(nextId++);
@@ -27,8 +28,20 @@ public class Member {
         return contactInfo;
     }
 
-    public MembershipTier getTier(){
+    public MembershipTier getTier() {
         return membershipTier;
+    }
+
+    public int getLoansCount() {
+        return loansCount;
+    }
+
+    public void incrementLoansCount() {
+        loansCount++;
+    }
+
+    public void decrementLoansCount() {
+        loansCount--;
     }
 
 }
