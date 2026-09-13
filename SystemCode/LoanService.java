@@ -1,0 +1,56 @@
+package SystemCode;
+
+import java.util.ArrayList;
+
+public class LoanService {
+
+    private ArrayList<Loan> loans = new ArrayList<>();
+    private MemberRegistry memberRegistry = new MemberRegistry();
+    private Catalog catalog = new Catalog();
+
+    public BorrowResult borrowItem(Member member, LibraryItem libraryItem) {
+
+        if (!memberRegistry.isMemberRegistered(member))
+            return new BorrowResult(null, "The member is not registered");
+
+        if (!catalog.containsItem(libraryItem))
+            return new BorrowResult(null, "This item does not exist.");
+
+        if (member.getLoansCount() >= member.getTier().getBorrowingLimit())
+            return new BorrowResult(null, "Member has reached the borrowing limit.");
+
+        Copy copy = libraryItem.borrowCopy();
+
+        if (copy == null)
+            return new BorrowResult(null, "There is no available copy.");
+
+        Loan loan = new Loan(member, copy);
+        loans.add(loan);
+        
+        member.incrementLoansCount();
+        return new BorrowResult(loan, "Borrow successful.");
+
+    }
+
+    public boolean returnItem(Member member, Copy copy, String condition) {
+        Loan loanToRemove = null;
+
+        for (Loan loan : loans) {
+            if (loan.getMember().getId().equals(member.getId())
+                    && loan.getCopy().getCopyId().equals(copy.getCopyId())) {
+
+                copy.getItem().returnCopy(copy, condition);
+                loanToRemove = loan;
+                break;
+            }
+        }
+
+        if (loanToRemove != null) {
+            loans.remove(loanToRemove);
+            return true;
+        }
+
+        return false;
+    }
+
+}
