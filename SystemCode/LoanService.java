@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class LoanService {
 
     private ArrayList<Loan> loans = new ArrayList<>();
+    private ReservationQueue reservationQueue;
+
     private MemberRegistry memberRegistry = new MemberRegistry();
     private Catalog catalog = new Catalog();
 
@@ -26,10 +28,26 @@ public class LoanService {
 
         Loan loan = new Loan(member, copy);
         loans.add(loan);
-        
+
         member.incrementLoansCount();
         return new BorrowResult(loan, "Borrow successful.");
 
+    }
+
+    public boolean reserveItem(Member member, LibraryItem libraryItem) {
+
+        if (!memberRegistry.isMemberRegistered(member))
+            return false;
+
+        if (!catalog.containsItem(libraryItem))
+            return false;
+
+        if (libraryItem.isAvailable())
+            return false;
+
+        reservationQueue.addReservation(libraryItem, member);
+
+        return true;
     }
 
     public boolean returnItem(Member member, Copy copy, String condition) {
@@ -47,10 +65,17 @@ public class LoanService {
 
         if (loanToRemove != null) {
             loans.remove(loanToRemove);
-            return true;
+            member.decrementLoansCount();
+        } else
+            return false;
+
+        Reservation reservation = reservationQueue.getNextReservation(copy.getItem());
+
+        if (reservation != null) {
+            copy.markAsBorrowed();
         }
 
-        return false;
+        return true;
     }
 
 }
