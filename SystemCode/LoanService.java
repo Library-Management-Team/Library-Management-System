@@ -1,11 +1,12 @@
 package SystemCode;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class LoanService {
 
     private ArrayList<Loan> loans = new ArrayList<>();
-    private ReservationQueue reservationQueue;
+    private ReservationQueue reservationQueue = new ReservationQueue();
 
     private MemberRegistry memberRegistry = new MemberRegistry();
     private Catalog catalog = new Catalog();
@@ -21,7 +22,41 @@ public class LoanService {
         if (member.getLoansCount() >= member.getTier().getBorrowingLimit())
             return new BorrowResult(null, "Member has reached the borrowing limit.");
 
-        Copy copy = libraryItem.borrowCopy();
+        Reservation reservation = reservationQueue.getNextReservation(libraryItem);
+
+        if (reservation != null) {
+
+            if (reservation.getHoldDate() != null
+                    && reservation.getHoldDate().plusDays(3).isBefore(LocalDate.now())) {
+
+                Copy heldCopy = reservation.getHeldCopy();
+                reservationQueue.removeReservation(reservation);
+
+                reservation = reservationQueue.getNextReservation(libraryItem);
+
+                if (reservation != null) {
+                    reservation.setHoldDate(LocalDate.now());
+                    reservation.setHeldCopy(heldCopy);
+                }
+            }
+
+            if (reservation != null && reservation.getHoldDate() != null
+                    && reservation.getMember() != member) {
+
+                return new BorrowResult(null, "This item is reserved for another member.");
+            }
+
+        }
+        Copy copy;
+        if (reservation != null
+                && reservation.getHoldDate() != null
+                && reservation.getMember() == member) {
+
+            copy = reservation.getHeldCopy();
+
+        } else {
+            copy = libraryItem.borrowCopy();
+        }
 
         if (copy == null)
             return new BorrowResult(null, "There is no available copy.");
@@ -30,6 +65,13 @@ public class LoanService {
         loans.add(loan);
 
         member.incrementLoansCount();
+
+        if (reservation != null
+                && reservation.getMember() == member) {
+
+            reservationQueue.removeReservation(reservation);
+        }
+
         return new BorrowResult(loan, "Borrow successful.");
 
     }
@@ -72,7 +114,9 @@ public class LoanService {
         Reservation reservation = reservationQueue.getNextReservation(copy.getItem());
 
         if (reservation != null) {
-            copy.markAsBorrowed();
+            reservation.setHoldDate(LocalDate.now());
+            reservation.setHeldCopy(copy);
+            copy.markAsHeld();
         }
 
         return true;
