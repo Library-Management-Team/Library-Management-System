@@ -8,6 +8,7 @@ public class Copy {
     private String condition;
     private boolean available;
     private LibraryItem item;
+    private boolean held;
 
     public Copy(LibraryItem item) {
         this.item = item;
@@ -42,5 +43,17 @@ public class Copy {
 
     public void markAsAvailable() {
         available = true;
+    }
+
+    public void markAsHeld() {
+        held = true;
+    }
+
+    public boolean isHeld() {
+        return held;
+    }
+
+    public void releaseHold() {
+        held = false;
     }
 }
