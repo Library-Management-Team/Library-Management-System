@@ -1,8 +1,12 @@
 package SystemCode;
 
+import java.time.LocalDate;
+
 public class Reservation {
     private LibraryItem libraryItem;
     private Member member;
+    private LocalDate holdDate;
+    private Copy heldCopy;
 
     public Reservation(LibraryItem libraryItem, Member member) {
         this.libraryItem = libraryItem;
@@ -17,5 +21,20 @@ public class Reservation {
         return member;
     }
 
+    public void setHoldDate(LocalDate holdDate){
+        this.holdDate = holdDate;
+    }
+
+    public LocalDate getHoldDate(){
+        return holdDate;
+    }
+
+    public Copy getHeldCopy() {
+        return heldCopy;
+    }
+
+    public void setHeldCopy(Copy heldCopy) {
+        this.heldCopy = heldCopy;
+    }
 
 }
