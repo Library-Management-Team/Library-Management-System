@@ -48,6 +48,19 @@ public abstract class LibraryItem {
         copies.add(copy);
     }
 
+    public void addCopies(int numberOfCopies) {
+
+        if (numberOfCopies < 0) {
+            throw new IllegalArgumentException(
+                    "Number of copies cannot be negative."
+            );
+        }
+
+        for (int i = 0; i < numberOfCopies; i++) {
+            addCopy(new Copy(this));
+        }
+    }
+
     public ArrayList<Copy> getCopies() {
         ArrayList<Copy> copyList = new ArrayList<>();
 
