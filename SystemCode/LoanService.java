@@ -10,6 +10,7 @@ public class LoanService {
 
     private MemberRegistry memberRegistry = new MemberRegistry();
     private Catalog catalog = new Catalog();
+    private FineCalculator fineCalculator = new FineCalculator();
 
     public BorrowResult borrowItem(Member member, LibraryItem libraryItem) {
 
@@ -21,6 +22,9 @@ public class LoanService {
 
         if (member.getLoansCount() >= member.getTier().getBorrowingLimit())
             return new BorrowResult(null, "Member has reached the borrowing limit.");
+
+        if (member.getOutstandingBalance() > 10)
+            return new BorrowResult(null, "Member has outstanding fines over $10.");
 
         Reservation reservation = reservationQueue.getNextReservation(libraryItem);
 
@@ -111,6 +115,11 @@ public class LoanService {
         } else
             return false;
 
+        double fine = fineCalculator.calculateFine(loanToRemove);
+
+        if (fine > 0) {
+            member.addFine(fine);
+        }
         Reservation reservation = reservationQueue.getNextReservation(copy.getItem());
 
         if (reservation != null) {
