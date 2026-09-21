@@ -54,6 +54,10 @@ public class Member {
     }
 
     public void payFine(double amount) {
+
+        if (amount < 0 || amount > outstandingBalance) {
+            return;
+        }
         outstandingBalance -= amount;
     }
 
