@@ -2,6 +2,7 @@ package SystemCode;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LoanService {
 
@@ -23,7 +24,7 @@ public class LoanService {
         if (member.getLoansCount() >= member.getTier().getBorrowingLimit())
             return new BorrowResult(null, "Member has reached the borrowing limit.");
 
-        if (member.getOutstandingBalance() > 10)
+        if (member.getOutstandingBalance() > MembershipLimits.MAX_OUTSTANDING_FINE)
             return new BorrowResult(null, "Member has outstanding fines over $10.");
 
         Reservation reservation = reservationQueue.getNextReservation(libraryItem);
@@ -129,6 +130,19 @@ public class LoanService {
         }
 
         return true;
+    }
+
+    public List<Copy> getCopiesBorrowedBy(Member member) {
+
+    List<Copy> copies = new ArrayList<>();
+
+        for (Loan loan : loans) {
+            if (loan.getMember().getId().equals(member.getId())) {
+                copies.add(loan.getCopy());
+            }
+        }
+
+        return copies;
     }
 
 }
