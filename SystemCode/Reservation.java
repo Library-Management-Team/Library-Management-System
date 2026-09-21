@@ -9,6 +9,9 @@ public class Reservation {
     private Copy heldCopy;
 
     public Reservation(LibraryItem libraryItem, Member member) {
+        if (libraryItem == null || member == null) {
+            throw new IllegalArgumentException("Library item and member cannot be null.");
+        }
         this.libraryItem = libraryItem;
         this.member = member;
     }

@@ -7,6 +7,9 @@ public abstract class LibraryItem {
     private ArrayList<Copy> copies;
 
     public LibraryItem(String title) {
+        if (title == null || title.isBlank()) {
+            throw new IllegalArgumentException("Title cannot be empty.");
+        }
         this.title = title;
         this.copies = new ArrayList<>();
     }

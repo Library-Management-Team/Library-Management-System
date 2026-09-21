@@ -10,6 +10,11 @@ public class Loan {
     private LocalDate dueDate;
 
     public Loan(Member member, Copy copy) {
+
+        if (member == null || copy == null) {
+            throw new IllegalArgumentException("Member and copy cannot be null.");
+        }
+        
         this.member = member;
         this.copy = copy;
         this.borrowDate = LocalDate.now();

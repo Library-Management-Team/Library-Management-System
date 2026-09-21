@@ -11,6 +11,17 @@ public class Member {
     private double outstandingBalance = 0.0;
 
     public Member(String name, String contactInfo, MembershipTier membershipTier) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name cannot be empty.");
+        }
+
+        if (contactInfo == null || contactInfo.isBlank()) {
+            throw new IllegalArgumentException("Contact information cannot be empty.");
+        }
+
+        if (membershipTier == null) {
+            throw new IllegalArgumentException("Membership tier cannot be null.");
+        }
         id = String.valueOf(nextId++);
         this.name = name;
         this.contactInfo = contactInfo;

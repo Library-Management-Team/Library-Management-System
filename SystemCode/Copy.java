@@ -11,6 +11,10 @@ public class Copy {
     private boolean held;
 
     public Copy(LibraryItem item) {
+
+        if (item == null) {
+            throw new IllegalArgumentException("Item cannot be null.");
+        }
         this.item = item;
         copyId = String.valueOf(nextCopyId++);
         condition = INITIAL_CONDITION;
