@@ -8,6 +8,7 @@ public class Member {
     private String contactInfo;
     private MembershipTier membershipTier;
     private int loansCount = 0;
+    private double outstandingBalance = 0.0;
 
     public Member(String name, String contactInfo, MembershipTier membershipTier) {
         id = String.valueOf(nextId++);
@@ -42,6 +43,18 @@ public class Member {
 
     public void decrementLoansCount() {
         loansCount--;
+    }
+
+    public double getOutstandingBalance() {
+    return outstandingBalance;
+    }
+
+    public void addFine(double amount) {
+        outstandingBalance += amount;
+    }
+
+    public void payFine(double amount) {
+        outstandingBalance -= amount;
     }
 
 }
