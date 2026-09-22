@@ -1,5 +1,7 @@
 package SystemCode;
 
+import java.math.BigDecimal;
+
 public class Member {
     private static int nextId = 1;
 
@@ -8,7 +10,7 @@ public class Member {
     private String contactInfo;
     private MembershipTier membershipTier;
     private int loansCount = 0;
-    private double outstandingBalance = 0.0;
+    private BigDecimal outstandingBalance = new BigDecimal("0.0");
 
     public Member(String name, String contactInfo, MembershipTier membershipTier) {
         if (name == null || name.isBlank()) {
@@ -56,20 +58,20 @@ public class Member {
         loansCount--;
     }
 
-    public double getOutstandingBalance() {
-    return outstandingBalance;
+    public void addFine(BigDecimal amount) {
+        outstandingBalance = outstandingBalance.add(amount);
     }
 
-    public void addFine(double amount) {
-        outstandingBalance += amount;
-    }
-
-    public void payFine(double amount) {
-
-        if (amount < 0 || amount > outstandingBalance) {
+    public void payFine(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) < 0 || amount.compareTo(outstandingBalance) > 0) {
             return;
         }
-        outstandingBalance -= amount;
+
+        outstandingBalance = outstandingBalance.subtract(amount);
+    }
+
+    public BigDecimal getOutstandingBalance(){
+        return outstandingBalance;
     }
 
 }

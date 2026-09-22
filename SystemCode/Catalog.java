@@ -9,7 +9,7 @@ public class Catalog {
 
     public void addItem(LibraryItem item) {
         libraryItems.add(item);
-    }   
+    }
 
     public List<LibraryItem> getCatalogItems() {
         List<LibraryItem> items = new ArrayList<>();
@@ -38,6 +38,5 @@ public class Catalog {
         }
         return false;
     }
-
 
 }

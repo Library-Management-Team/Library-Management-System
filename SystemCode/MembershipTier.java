@@ -2,7 +2,7 @@ package SystemCode;
 
 public enum MembershipTier {
     STANDARD(MembershipLimits.STANDARD_ITEM_LIMIT, MembershipLimits.STANDARD_LOAN_PERIOD),
-    PREMIUM(MembershipLimits.PREMIUM_ITEMP_LIMIT, MembershipLimits.PREMIUM_LOAN_PERIOD);
+    PREMIUM(MembershipLimits.PREMIUM_ITEM_LIMIT, MembershipLimits.PREMIUM_LOAN_PERIOD);
 
     private final int borrowingLimit;
     private final int loanPeriod;

@@ -38,7 +38,7 @@ public class Copy {
     }
 
     public boolean isAvailable() {
-        return available;
+        return available && !held;
     }
 
     public void markAsBorrowed() {

@@ -1,5 +1,6 @@
 package SystemCode;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,11 +8,19 @@ import java.util.List;
 public class LoanService {
 
     private ArrayList<Loan> loans = new ArrayList<>();
-    private ReservationQueue reservationQueue = new ReservationQueue();
+    private ReservationQueue reservationQueue;
+    private MemberRegistry memberRegistry;
+    private Catalog catalog;
+    private FineCalculator fineCalculator;
 
-    private MemberRegistry memberRegistry = new MemberRegistry();
-    private Catalog catalog = new Catalog();
-    private FineCalculator fineCalculator = new FineCalculator();
+    public LoanService(ReservationQueue reservationQueue, MemberRegistry memberRegistry, Catalog catalog,
+            FineCalculator fineCalculator) {
+
+        this.reservationQueue = reservationQueue;
+        this.memberRegistry = memberRegistry;
+        this.catalog = catalog;
+        this.fineCalculator = fineCalculator;
+    }
 
     public BorrowResult borrowItem(Member member, LibraryItem libraryItem) {
 
@@ -24,7 +33,7 @@ public class LoanService {
         if (member.getLoansCount() >= member.getTier().getBorrowingLimit())
             return new BorrowResult(null, "Member has reached the borrowing limit.");
 
-        if (member.getOutstandingBalance() > MembershipLimits.MAX_OUTSTANDING_FINE)
+        if (member.getOutstandingBalance().compareTo(MembershipLimits.MAX_OUTSTANDING_FINE) > 0)
             return new BorrowResult(null, "Member has outstanding fines over $10.");
 
         Reservation reservation = reservationQueue.getNextReservation(libraryItem);
@@ -75,6 +84,7 @@ public class LoanService {
                 && reservation.getMember() == member) {
 
             reservationQueue.removeReservation(reservation);
+            copy.releaseHold();
         }
 
         return new BorrowResult(loan, "Borrow successful.");
@@ -116,9 +126,9 @@ public class LoanService {
         } else
             return false;
 
-        double fine = fineCalculator.calculateFine(loanToRemove);
+        BigDecimal fine = fineCalculator.calculateFine(loanToRemove);
 
-        if (fine > 0) {
+        if (fine.compareTo(BigDecimal.ZERO) > 0) {
             member.addFine(fine);
         }
         Reservation reservation = reservationQueue.getNextReservation(copy.getItem());
@@ -134,7 +144,7 @@ public class LoanService {
 
     public List<Copy> getCopiesBorrowedBy(Member member) {
 
-    List<Copy> copies = new ArrayList<>();
+        List<Copy> copies = new ArrayList<>();
 
         for (Loan loan : loans) {
             if (loan.getMember().getId().equals(member.getId())) {

@@ -40,4 +40,8 @@ public class Reservation {
         this.heldCopy = heldCopy;
     }
 
+    public void setHoldDateForDemo(LocalDate holdDate) {
+        this.holdDate = holdDate;
+    }
+
 }
