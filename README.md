@@ -6,35 +6,38 @@
 
 > Our small library needs software to manage lending operations.
 
-The system allows the library to:
+>The system allows the library to:
 
-Register members.
-Add books, magazines, and DVDs.
-Borrow and return different types of library items.
-Manage different membership levels.
-Reserve unavailable items.
-Manage reservations using a queue.
-Calculate and manage overdue fines.
-Return a list of items currently borrowed by a specific member.
-Return a list of items that are currently available.
-Return the due date based on the item and membership rules.
+- Register members.
+- Add books, magazines, and DVDs.
+- Borrow and return different types of library items.
+- Manage different membership levels.
+- Reserve unavailable items.
+- Manage reservations using a queue.
+- Calculate and manage overdue fines.
+- Return a list of items currently borrowed by a specific member.
+- Return a list of items that are currently available.
+- Return the due date based on the item and membership rules.
 
 ## Entities/classes
 
-Library => Coordinates the main library operations.
-LibraryItem => Contains the common attributes and methods for library items.
-Book => Represents a book and holds its information.
-Magazine => Represents a magazine and holds its information.
-DVD => Represents a DVD and holds its information.
-Copy => Represents one physical copy of a library item and stores its copy ID and condition.
-Member => Records information about library members.
-Loan => Contains lending information, such as the borrowing date and due date.
-Reservation => Represents a member's request for an unavailable item.
-ReservationQueue => Manages reservations for unavailable items.
-FineCalculator => Calculates overdue fines.
-LoanService => Handles borrowing, returning, and reservation operations.
-BorrowResult => Stores the result of a borrowing attempt.
-MemberRegistry => Manages registered members.
+- Library => Coordinates the main library operations.
+- Catalog => Manages the library items and their copies.
+- LibraryItem => Contains the common attributes and methods for library items.
+- Book => Represents a book and holds its information.
+- Magazine => Represents a magazine and holds its information.
+- DVD => Represents a DVD and holds its information.
+- Copy => Represents one physical copy of a library item and stores its copy ID and condition.
+- Member => Records information about library members.
+- MembershipTier => Represents the membership level of a member.
+- MembershipLimits => Stores the borrowing limits and additional loan days for each membership tier.
+- Loan => Contains lending information, such as the borrowing date and due date.
+- Reservation => Represents a member's request for an unavailable item.
+- ReservationQueue => Manages reservations for unavailable items.
+- FineCalculator => Calculates overdue fines.
+- LoanService => Handles borrowing, returning, and reservation operations.
+- BorrowResult => Stores the result of a borrowing attempt.
+- MemberRegistry => Manages registered members.
 
 ## How To Run / Requirements
 
@@ -43,10 +46,10 @@ MemberRegistry => Manages registered members.
 
 ## Run Commands
 
-Open the terminal in the project root folder and run:
+> Open the terminal in the project root folder and run:
 
-javac SystemCode/*.java
-java SystemCode.Main
+- javac SystemCode/*.java
+- java SystemCode.Main
 
 # Testing
 
