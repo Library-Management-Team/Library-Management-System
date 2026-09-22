@@ -7,6 +7,9 @@ public abstract class LibraryItem {
     private ArrayList<Copy> copies;
 
     public LibraryItem(String title) {
+        if (title == null || title.isBlank()) {
+            throw new IllegalArgumentException("Title cannot be empty.");
+        }
         this.title = title;
         this.copies = new ArrayList<>();
     }
@@ -43,6 +46,19 @@ public abstract class LibraryItem {
 
     public void addCopy(Copy copy) {
         copies.add(copy);
+    }
+
+    public void addCopies(int numberOfCopies) {
+
+        if (numberOfCopies < 0) {
+            throw new IllegalArgumentException(
+                    "Number of copies cannot be negative."
+            );
+        }
+
+        for (int i = 0; i < numberOfCopies; i++) {
+            addCopy(new Copy(this));
+        }
     }
 
     public ArrayList<Copy> getCopies() {

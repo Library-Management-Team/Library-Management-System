@@ -6,26 +6,38 @@
 
 > Our small library needs software to manage lending operations.
 
-The system allows the library to:
+>The system allows the library to:
 
 - Register members.
 - Add books, magazines, and DVDs.
-- Borrow items while enforcing a maximum of 5 borrowed items per member.
-- Return items of different types.
+- Borrow and return different types of library items.
+- Manage different membership levels.
+- Reserve unavailable items.
+- Manage reservations using a queue.
+- Calculate and manage overdue fines.
 - Return a list of items currently borrowed by a specific member.
 - Return a list of items that are currently available.
-- Return the due date, which depends on the type of item.
+- Return the due date based on the item and membership rules.
 
 ## Entities/classes
 
-- Library => Responsible for basic operations, such as adding new books or members.
-- LibraryItem => Contains the common attributes and methods for any item in the library, such as the title.
-- Book => Represents a library item and holds the book's information.
-- Magazine => Represents a library item and holds the magazine's information.
-- DVD => Represents a library item and holds the DVD's information.
+- Library => Coordinates the main library operations.
+- Catalog => Manages the library items and their copies.
+- LibraryItem => Contains the common attributes and methods for library items.
+- Book => Represents a book and holds its information.
+- Magazine => Represents a magazine and holds its information.
+- DVD => Represents a DVD and holds its information.
 - Copy => Represents one physical copy of a library item and stores its copy ID and condition.
-- Member => Records information about who borrows books from the library.
-- BorrowDetails => Contains lending information, such as the borrowing date and due date, to help manage the lending process.
+- Member => Records information about library members.
+- MembershipTier => Represents the membership level of a member.
+- MembershipLimits => Stores the borrowing limits and additional loan days for each membership tier.
+- Loan => Contains lending information, such as the borrowing date and due date.
+- Reservation => Represents a member's request for an unavailable item.
+- ReservationQueue => Manages reservations for unavailable items.
+- FineCalculator => Calculates overdue fines.
+- LoanService => Handles borrowing, returning, and reservation operations.
+- BorrowResult => Stores the result of a borrowing attempt.
+- MemberRegistry => Manages registered members.
 
 ## How To Run / Requirements
 
@@ -34,10 +46,10 @@ The system allows the library to:
 
 ## Run Commands
 
-Open the terminal in the project root folder and run:
+> Open the terminal in the project root folder and run:
 
-javac SystemCode/*.java
-java SystemCode.Main
+- javac SystemCode/*.java
+- java SystemCode.Main
 
 # Testing
 
@@ -45,14 +57,16 @@ java SystemCode.Main
 
 >> Demo scenario :
 
-1. Add a book with 3 copies, a magazine with 1 copy, and a DVD with 2 copies.
-2. Register 2 members.
-3. Borrow one of each type and print the due date for each — the output must visibly show 14, 7 and 3 days.
-4. Print the full available-items list, showing title and type.
-5. Borrow until a member hits the 5-item limit, then attempt one more and print the refusal.
-6. Borrow every copy of the magazine, then try again and print the refusal. (Make sure this case genuinely has no copies free — that's what went wrong last time.)
-7. Return a specific copy, mark it worn, and print the item's copies with their conditions so the change is visible.
-8. Print the available list again so the difference before/after is obvious.
+1. Register members with different membership levels.
+2. Borrow the same item and show their due dates based on membership level.
+3. Show that another member can borrow more items according to their membership level.
+4. Borrow all copies of an item and create reservations for it.
+5. Return a copy and show that it is held for the first reserver.
+6. Expire the first reservation and show that the next member in the queue gets the opportunity to borrow.
+7. Add fine aver than 10$ for an member.
+8. Try to borrow while having an outstanding fine above the allowed amount.
+9. Pay the fine and show that borrowing is possible again.
+10. Try to add a negative number of copies and show that the operation is rejected.
 
 # Design Principles
 
@@ -71,3 +85,4 @@ java SystemCode.Main
 2. The abstract class allows us to store common fields and implemented methods in one place. We also use an abstract `getLoanPeriodDays()` method because each item type can have a different loan period, so each subclass must provide its own implementation.
 
 3. An interface is better for a capability or behavior. If we used an interface for `LibraryItem`, each item would need to manage its own fields and common methods, which would cause duplicated code.
+

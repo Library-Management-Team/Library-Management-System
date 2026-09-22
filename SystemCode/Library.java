@@ -1,128 +1,72 @@
 package SystemCode;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
-
 
 public class Library {
 
-    private static final int MAX_ITEMS_PER_MEMBER = 5;
+    private Catalog catalog;
+    private MemberRegistry memberRegistry;
+    private ReservationQueue reservationQueue;
+    private FineCalculator fineCalculator;
+    private LoanService loanService;
 
-    private ArrayList<LibraryItem> libraryItems = new ArrayList<>();
-    private ArrayList<Member> members = new ArrayList<>();
-    private ArrayList<BorrowDetails> loans = new ArrayList<>();
+    public Library() {
+
+        catalog = new Catalog();
+        memberRegistry = new MemberRegistry();
+        reservationQueue = new ReservationQueue();
+        fineCalculator = new FineCalculator();
+
+        loanService = new LoanService(
+                reservationQueue,
+                memberRegistry,
+                catalog,
+                fineCalculator);
+    }
+
+    public Member registerMember(String name, String contactInfo, MembershipTier membershipTier) {
+        return memberRegistry.registerMember(name, contactInfo, membershipTier);
+    }
 
     public void addItem(LibraryItem item) {
-        libraryItems.add(item);
-    }
-
-    public Member registerMember(String name, String contactInfo) {
-        Member member = new Member(name, contactInfo);
-        members.add(member);
-        return member;
-    }
-
-    public List<LibraryItem> getLibraryItems() {
-        List<LibraryItem> items = new ArrayList<>();
-
-        for (LibraryItem item : libraryItems) {
-            items.add(item);
-        }
-
-        return items;
-    }
-
-    public BorrowDetails borrowItem(Member member, LibraryItem libraryItem) {
-        boolean existFlag = false;
-
-        for (Member currentMember : members) {
-            if (currentMember.getId().equals(member.getId())) {
-                existFlag = true;
-                break;
-            }
-        }
-
-        if (!existFlag) {
-            return null;
-        }
-        existFlag = false;
-
-        int borrowedItemsCount = 0;
-
-        for (BorrowDetails loan : loans) {
-            if (loan.getMember().getId().equals(member.getId())) {
-                borrowedItemsCount++;
-            }
-        }
-
-        if (borrowedItemsCount >= MAX_ITEMS_PER_MEMBER) {
-            return null;
-        }
-
-        for (LibraryItem item : libraryItems) {
-            if (item == libraryItem) {
-                existFlag = true;
-                break;
-            }
-        }
-
-        if (!existFlag) {
-            return null;
-        }
-
-        Copy copy = libraryItem.borrowCopy();
-
-        if (copy == null) {
-            return null;
-        }
-
-        BorrowDetails loan = new BorrowDetails(member, copy);
-
-        loans.add(loan);
-
-        return loan;
-        
-    }
-
-    public boolean returnItem(Member member, Copy copy, String condition) {
-        BorrowDetails loanToRemove = null;
-
-        for (BorrowDetails loan : loans) {
-            if (loan.getMember().getId().equals(member.getId())
-                    && loan.getCopy().getCopyId().equals(copy.getCopyId())) {
-
-                copy.getItem().returnCopy(copy, condition);
-                loanToRemove = loan;
-                break;
-            }
-        }
-
-        if (loanToRemove != null) {
-            loans.remove(loanToRemove);
-            return true;
-        }
-
-        return false;
-    }
-
-    public List<Copy> getCopiesBorrowedBy(Member member) {
-        List<Copy> copies = new ArrayList<>();
-
-        for (BorrowDetails loan : loans) {
-            if (loan.getMember().getId().equals(member.getId())) {
-                copies.add(loan.getCopy());
-            }
-        }
-
-        return copies;
+        catalog.addItem(item);
     }
 
     public List<LibraryItem> getAvailableItems() {
-        List<LibraryItem> items = new ArrayList<>();
-        for (LibraryItem item : libraryItems) {
-            if (item.isAvailable())
-                items.add(item);
-        }
-        return items;
+        return catalog.getAvailableItems();
     }
+
+    public List<LibraryItem> getCatalogItems() {
+        return catalog.getCatalogItems();
+    }
+
+    public BorrowResult borrowItem(Member member, LibraryItem libraryItem) {
+        return loanService.borrowItem(member, libraryItem);
+    }
+
+    public boolean returnItem(Member member, Copy copy, String condition) {
+        return loanService.returnItem(member, copy, condition);
+    }
+
+    public boolean reserveItem(Member member, LibraryItem libraryItem) {
+        return loanService.reserveItem(member, libraryItem);
+    }
+
+    public List<Copy> getCopiesBorrowedBy(Member member) {
+        return loanService.getCopiesBorrowedBy(member);
+    }
+
+    public BigDecimal getOutstandingBalance(Member member) {
+        return member.getOutstandingBalance();
+    }
+
+    public void payFine(Member member, BigDecimal amount) {
+        member.payFine(amount);
+    }
+    
+    public Reservation getNextReservation(LibraryItem item) {
+        return reservationQueue.getNextReservation(item);
+    }
+
 }

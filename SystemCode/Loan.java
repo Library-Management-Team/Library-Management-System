@@ -2,18 +2,26 @@ package SystemCode;
 
 import java.time.LocalDate;
 
-public class BorrowDetails {
+public class Loan {
 
     private Member member;
     private Copy copy;
     private LocalDate borrowDate;
     private LocalDate dueDate;
 
-    public BorrowDetails(Member member, Copy copy) {
+    public Loan(Member member, Copy copy) {
+
+        if (member == null || copy == null) {
+            throw new IllegalArgumentException("Member and copy cannot be null.");
+        }
+        
         this.member = member;
         this.copy = copy;
         this.borrowDate = LocalDate.now();
-        this.dueDate = borrowDate.plusDays(copy.getItem().getLoanPeriodDays());
+        this.dueDate = borrowDate.plusDays(
+        copy.getItem().getLoanPeriodDays()
+        + member.getTier().getLoanPeriod()
+        );
     }
 
     public Member getMember() {
