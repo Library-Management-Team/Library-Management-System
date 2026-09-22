@@ -102,3 +102,133 @@
 2. The abstract class allows us to store common fields and implemented methods in one place. We also use an abstract `getLoanPeriodDays()` method because each item type can have a different loan period, so each subclass must provide its own implementation.
 
 3. An interface is better for a capability or behavior. If we used an interface for `LibraryItem`, each item would need to manage its own fields and common methods, which would cause duplicated code.
+
+## Analyze the requirements
+
+>> For Milestone 3:
+
+1. **New entities/classes and their responsibilities**
+
+- MembershipTier => Represents the membership level of a member and defines the borrowing limit and any additional loan period.
+
+- MembershipLimits => Stores the borrowing limits and extra loan days associated with each membership tier.
+
+- Reservation => Represents a member's request to borrow an unavailable library item and stores the reservation date and held copy.
+
+- ReservationQueue => Manages reservations for unavailable library items in first-in, first-out order.
+
+- FineCalculator => Calculates the fine for an overdue loan based on the number of late days and the member's membership tier.
+
+- LoanService => Handles the main borrowing, returning, and reservation business rules instead of keeping all of them inside Library.
+
+- BorrowResult => Stores the result of a borrowing attempt and explains the reason when the borrowing operation fails.
+
+- MemberRegistry => Manages registered members and checks whether a member is registered in the library.
+
+2. **Relationships**
+
+- A Member has one MembershipTier.
+
+- A Reservation belongs to one Member and one LibraryItem.
+
+- A LibraryItem can have multiple Reservations.
+
+- A ReservationQueue contains multiple Reservations and processes them in FIFO order.
+
+- A Loan belongs to one Member and one Copy.
+
+- A BorrowResult contains either a successful Loan or a failure reason.
+
+3. **Business rules**
+
+- A Standard member can borrow a maximum of 5 items at once.
+
+- A Premium member can borrow a maximum of 10 items at once.
+
+- Premium members receive 7 additional loan days compared with the normal item loan period.
+
+- A member cannot borrow an item if their outstanding fines are more than $10.00.
+
+- A member can reserve an item only when no copy is currently available.
+
+- When a returned copy has a reservation, it is held for the next member in the reservation queue instead of becoming generally available.
+
+- A reservation expires after 3 days if the member does not collect the held copy.
+
+- When a reservation expires, the held copy is passed to the next member in the queue.
+
+- A late return creates a fine based on the number of overdue days.
+
+- Premium members pay half of the calculated fine.
+
+- A member with an outstanding fine can pay the balance before borrowing again.
+
+4. **Assumptions**
+
+- Membership tiers are represented using an enum because the system has just two of membership levels.
+
+- BigDecimal is used to represent money instead of double because floating-point arithmetic can produce precision errors. For example, 0.1 + 0.2 using double does not produce exactly 0.3.
+
+- The borrowing operation uses a result object instead of exceptions for normal borrowing failures because failures are expected from rules, not exceptional program errors.
+
+5. **What is different at Library class?**
+
+The Library class is becoming a god class because it currently handles too many responsibilities, including:
+
+- Registering members.
+
+- Adding library items.
+
+- Managing the catalog.
+
+- Checking available items.
+
+- Borrowing items.
+
+- Returning items.
+
+- Creating and managing reservations.
+
+- Managing reservation queues.
+
+- Calculating overdue fines.
+
+- Storing and checking member fine balances.
+
+- Processing fine payments.
+
+To reduce these responsibilities, the work is divided into specialized classes:
+
+- Catalog => Manages library items, their copies, and availability.
+
+- MemberRegistry => Handles member registration and membership lookup.
+
+- LoanService => Handles borrowing, returning, and the related business rules.
+
+- ReservationQueue => Handles the reservation queue and the order of reservations.
+
+- FineCalculator => Calculates overdue fines.
+
+- Library => Acts as a simpler entry point that coordinates these services instead of implementing all business rules itself.
+
+6. **Membership tier design: Why an enum?**
+
+>We chose an enum for MembershipTier instead of a class hierarchy because the system currently has a small number of membership levels: STANDARD and PREMIUM.
+
+An enum also makes the code simpler and avoids creating unnecessary subclasses such as StandardMember and PremiumMember.
+
+7. **How will money be represented?**
+
+We will use BigDecimal to represent money.
+
+When testing floating-point arithmetic with:
+
+System.out.println(0.1 + 0.2);
+
+the output is: 0.30000000000000004
+
+This happens because double uses binary floating-point representation and cannot represent some decimal values exactly.
+
+For this reason, the system uses BigDecimal for fines and balances so that monetary calculations maintain decimal precision.
+
+8. **Updated class diagram**
