@@ -232,3 +232,4 @@ This happens because double uses binary floating-point representation and cannot
 For this reason, the system uses BigDecimal for fines and balances so that monetary calculations maintain decimal precision.
 
 8. **Updated class diagram**
+ ![Milestone 3 class diagram](images/milestone_3.png)
